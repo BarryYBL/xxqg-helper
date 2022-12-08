@@ -12,7 +12,7 @@ def up_info():
 
     __INFO = "By Kenf"
     try:        
-        update_log = requests.get("http://1.15.144.22/Update.html").content.decode("utf8")
+        update_log = requests.get("https://raw.githubusercontent.com/trustyboy/xxqg-helper/master/Config/Update.html").content.decode("utf8")
         update_log = update_log.split("\n")
         print(color.yellow("[*] " + __INFO))
         print(color.yellow("[*] 程序版本为：{}".format(__Version)))
@@ -34,7 +34,6 @@ def up_info():
             for i in update_log[4:]:
                 print(color.red("[*] " + i))            
             print(color.red("[*] 程序已中断"))
-            os.system("pause")
             os._exit(0)
     except:
         print(color.yellow("[*] 验证版本信息网络错误"))
