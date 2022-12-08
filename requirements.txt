@@ -1,0 +1,5 @@
+colorama==0.4.6
+Pillow==9.3.0
+pyzbar==0.1.9
+requests==2.25.1
+selenium==3.141.0
