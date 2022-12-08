@@ -8,9 +8,9 @@ def get_version(verstr):
 def up_info():
     print(color.yellow("[*] 正在联网获取更新信息..."))
 
-    __Version = "v20220525"
+    __Version = "v20221209"
 
-    __INFO = "By Kenf"
+    __INFO = "By Kenf, alex"
     try:        
         update_log = requests.get("https://raw.githubusercontent.com/trustyboy/xxqg-helper/master/Config/Update.html").content.decode("utf8")
         update_log = update_log.split("\n")

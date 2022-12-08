@@ -147,7 +147,6 @@ class XCore:
             img = self.base64_to_image(base64_str = QRcode_src)
             decocdeQR = decode(img)
             url = "dtxuexi://appclient/page/study_feeds?url=" + urllib.parse.quote(decocdeQR[0].data.decode('ascii'))
-            print(url)
             if os.environ.get("PushMode") == "2" or xue_cfg["useWS"]["SendDingDing"] == "1":
                 print("二维码将发往钉钉机器人...\n" + "=" * 60)
                 URID = self.sendDingDing(msg = url, mode = "link")
@@ -162,6 +161,7 @@ class XCore:
             save_user_cookies(cookies, userID)
             return cookies, URID
         except Exception as e:
+            print("等待扫描超时，退出程序。")
             os._exit(0)       
 
     def sendDingDing(self, msg, mode = "msg"):
