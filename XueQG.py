@@ -146,5 +146,4 @@ if __name__ == '__main__':
             
     seconds_used = int(time.time() - start_time)
     print("总计用时 " + str(math.floor(seconds_used / 60)) + " 分 " + str(seconds_used % 60) + " 秒")
-    print("本次学习已执行完成，2分钟后窗口将自动关闭")
-    os.system("timeout 120")
+    print("本次学习已执行完成")
