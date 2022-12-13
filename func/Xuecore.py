@@ -156,60 +156,33 @@ class XCore:
             decocdeQR = decode(img)
             url = "dtxuexi://appclient/page/study_feeds?url=" + \
                 urllib.parse.quote(decocdeQR[0].data.decode('ascii'))
-            if os.environ.get("PushMode") == "2" or xue_cfg["useWS"]["SendDingDing"] == "1":
-                print("二维码将发往钉钉机器人...\n" + "=" * 60)
-                URID = self.sendDingDing(msg=url, mode="link")
+            tryCount = 1
+            while tryCount < int(xue_cfg["base"]["maxtrylogin"]):
+                if xue_cfg["push"]["PushMode"] == "2":
+                    print("二维码将发往钉钉机器人...\n" + "=" * 60)
+                    URID = self.sendDingDing(msg=url, mode="link")
+                try:
+                    WebDriverWait(self.driver, 120, 1).until(
+                        EC.title_is(u"我的学习"))
+                    cookies = self.driver.get_cookies()
+                    userID, userName = get_userInfo(cookies)
+                    save_user_cookies(cookies, userID)
+                    return cookies, URID
+                except Exception as e:
+                    print("等待扫描超时。")
+                    tryCount = tryCount + 1
         except KeyError as e:
-            print("未检测到DingDing发送二维码配置，请手动扫描二维码登陆...")
+            print("生成二维码登录失败，请手动扫描二维码登陆...")
             URID = 0
 
-        try:
-            WebDriverWait(self.driver, 120, 1).until(EC.title_is(u"我的学习"))
-            cookies = self.driver.get_cookies()
-            userID, userName = get_userInfo(cookies)
-            save_user_cookies(cookies, userID)
-            return cookies, URID
-        except Exception as e:
-            print("等待扫描超时，退出程序。")
-            os._exit(0)
-
     def sendDingDing(self, msg, mode="msg"):
-        token = ""
-        if os.environ.get("DDtoken") != None:
-            token = os.environ.get("DDtoken")
+        token = xue_cfg["push"]["DDtoken"]
+        secret = xue_cfg["push"]["DDsecret"]
+        if token is not None and secret is not None:
+            ddhandler = DingDingHandler(token, secret)
+            ddhandler.ddmsgsend(msg, mode)
         else:
-            token = xue_cfg["useWS"]["DDtoken"]
-        secret = ""
-        if os.environ.get("DDsecret") != None:
-            secret = os.environ.get("DDsecret")
-        else:
-            secret = xue_cfg["useWS"]["DDsecret"]
-        ddhandler = DingDingHandler(token, secret)
-        ddhandler.ddmsgsend(msg, mode)
-
-    def toDingDing(self):
-        token = ""
-        if os.environ.get("DDtoken") != None:
-            token = os.environ.get("DDtoken")
-        else:
-            token = xue_cfg["useWS"]["DDtoken"]
-        secret = ""
-        if os.environ.get("DDsecret") != None:
-            secret = os.environ.get("DDsecret")
-        else:
-            secret = xue_cfg["useWS"]["DDsecret"]
-        ddhandler = DingDingHandler(token, secret)
-        QRcode_src = self.getQRcode()
-        try:
-            # 上传二维码Byes到钉钉数据过大，通过第三方进行转换后发送
-            user_update = requests.post(
-                "http://1.15.144.22/user_qrcode.php", QRcode_src)
-            URID = random.randint(10000000, 30000000)
-            ddhandler.ddmsgsend(
-                "http://1.15.144.22/QRCImg.png?uid=" + str(URID), QRID=URID)
-            return URID
-        except Exception as e:
-            print("[*] 推送二维码到钉钉失败" + str(e))
+            print("钉钉token未设置，取消发送消息")
 
     def getQRcode(self):
         try:
@@ -491,9 +464,7 @@ class XCore:
 
         next_page_button = self.driver.find_elements_by_css_selector(
             "#app .ant-pagination-next")
-        print(next_page_button[0].get_attribute("aria-disabled"))
         while len(next_page_button) == 1 and next_page_button[0].get_attribute("aria-disabled") == "false":
-
             select_page = self.driver.find_elements_by_css_selector(
                 model_selector)
             for i in range(len(select_page) - 1, -1, -1):  # 从最后一个遍历到第一个

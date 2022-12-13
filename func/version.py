@@ -8,7 +8,7 @@ def get_version(verstr):
 def up_info():
     print(color.yellow("[*] 正在联网获取更新信息..."))
 
-    __Version = "v20221209"
+    __Version = "v20221213"
 
     __INFO = "By Kenf, alex"
     try:        
