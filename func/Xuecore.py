@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from func.dingding import DingDingHandler
+from func.plushpush import PlusPushHandler
 from pyzbar.pyzbar import decode
 from PIL import Image
 from io import BytesIO
@@ -159,15 +160,15 @@ class XCore:
                 decocdeQR = decode(img)
                 url = "dtxuexi://appclient/page/study_feeds?url=" + \
                     urllib.parse.quote(decocdeQR[0].data.decode('ascii'))
-                if xue_cfg["push"]["PushMode"] == "2":
-                    print("二维码将发往钉钉机器人...\n" + "=" * 60)
-                    URID = self.sendDingDing(msg=url, mode="link")
+                print("发送二维码...\n" + "=" * 60)
+                URID = self.sendMessage(msg=url, mode="link")
                 try:
                     WebDriverWait(self.driver, 120, 1).until(
                         EC.title_is(u"我的学习"))
                     cookies = self.driver.get_cookies()
                     userID, userName = get_userInfo(cookies)
-                    save_user_cookies(cookies, userID)
+                    if xue_cfg["base"]["SetUser"] == "1":
+                        save_user_cookies(cookies, userID)
                     return cookies, URID
                 except Exception as e:
                     print("等待扫描超时，等待再次重试")
@@ -180,14 +181,22 @@ class XCore:
             print("生成二维码登录失败，请手动扫描二维码登陆...")
             URID = 0
 
-    def sendDingDing(self, msg, mode="msg"):
-        token = xue_cfg["push"]["DDtoken"]
-        secret = xue_cfg["push"]["DDsecret"]
-        if token is not None and secret is not None:
-            ddhandler = DingDingHandler(token, secret)
-            ddhandler.ddmsgsend(msg, mode)
-        else:
-            print("钉钉token未设置，取消发送消息")
+    def sendMessage(self, msg, mode="msg"):
+        if xue_cfg["push"]["PushMode"] == "2":
+            token = xue_cfg["push"]["DDtoken"]
+            secret = xue_cfg["push"]["DDsecret"]
+            if token is not None and secret is not None:
+                ddhandler = DingDingHandler(token, secret)
+                ddhandler.ddmsgsend(msg, mode)
+            else:
+                print("钉钉token未设置，取消发送消息")
+        elif xue_cfg["push"]["PushMode"] == "3":
+            token = xue_cfg["push"]["PPtoken"]
+            if token is not None:
+                ddhandler = PlusPushHandler(token)
+                ddhandler.ppmsgsend(msg, mode)
+            else:
+                print("PlusPush token未设置，取消发送消息")
 
     def getQRcode(self):
         try:
