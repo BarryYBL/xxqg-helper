@@ -44,6 +44,8 @@ def load_config(nologo=False):
             xue_cfg.set("base", "ModeType", os.environ.get("ModeType"))
         if os.environ.get("maxtrylogin") is not None:
             xue_cfg.set("base", "maxtrylogin", os.environ.get("maxtrylogin"))
+        if os.environ.get("tryloginsleep") is not None:
+            xue_cfg.set("base", "tryloginsleep", os.environ.get("tryloginsleep"))
         if os.environ.get("PushMode") is not None:
             xue_cfg.set("push", "PushMode", os.environ.get("PushMode"))
         if os.environ.get("DDtoken") is not None:

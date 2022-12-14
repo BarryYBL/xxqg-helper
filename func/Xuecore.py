@@ -121,43 +121,44 @@ class XCore:
         return img
 
     def logging(self):
-
-        print("正在打开二维码登陆界面,请稍后...")
-        self.driver.get("https://pc.xuexi.cn/points/login.html")
-        # 删除登录二维码界面多余元素
         try:
-            remover = WebDriverWait(self.driver, 30, 0.2).until(
-                lambda driver: driver.find_element_by_class_name("redflagbox"))
-        except exceptions.TimeoutException:
-            print("当前网络缓慢...")
-        else:
-            self.driver.execute_script('arguments[0].remove()', remover)
-        try:
-            remover = WebDriverWait(self.driver, 30, 0.2).until(
-                lambda driver: driver.find_element_by_class_name("layout-header"))
-        except exceptions.TimeoutException:
-            print("当前网络缓慢...")
-        else:
-            self.driver.execute_script('arguments[0].remove()', remover)
-        try:
-            remover = WebDriverWait(self.driver, 30, 0.2).until(
-                lambda driver: driver.find_element_by_class_name("layout-footer"))
-        except exceptions.TimeoutException:
-            print("当前网络缓慢...")
-        else:
-            self.driver.execute_script('arguments[0].remove()', remover)
-            self.driver.execute_script(
-                'window.scrollTo(document.body.scrollWidth/2 - 200 , 0)')
-
-        try:
-            # 取出iframe中二维码，并发往钉钉
-            QRcode_src = self.getQRcode()
-            img = self.base64_to_image(base64_str=QRcode_src)
-            decocdeQR = decode(img)
-            url = "dtxuexi://appclient/page/study_feeds?url=" + \
-                urllib.parse.quote(decocdeQR[0].data.decode('ascii'))
             tryCount = 1
             while tryCount < int(xue_cfg["base"]["maxtrylogin"]):
+                print("正在打开二维码登陆界面,请稍后...")
+                self.driver.get("https://pc.xuexi.cn/points/login.html")
+                # 删除登录二维码界面多余元素
+                try:
+                    remover = WebDriverWait(self.driver, 30, 0.2).until(
+                        lambda driver: driver.find_element_by_class_name("redflagbox"))
+                except exceptions.TimeoutException:
+                    print("当前网络缓慢...")
+                else:
+                    self.driver.execute_script(
+                        'arguments[0].remove()', remover)
+                try:
+                    remover = WebDriverWait(self.driver, 30, 0.2).until(
+                        lambda driver: driver.find_element_by_class_name("layout-header"))
+                except exceptions.TimeoutException:
+                    print("当前网络缓慢...")
+                else:
+                    self.driver.execute_script(
+                        'arguments[0].remove()', remover)
+                try:
+                    remover = WebDriverWait(self.driver, 30, 0.2).until(
+                        lambda driver: driver.find_element_by_class_name("layout-footer"))
+                except exceptions.TimeoutException:
+                    print("当前网络缓慢...")
+                else:
+                    self.driver.execute_script(
+                        'arguments[0].remove()', remover)
+                    self.driver.execute_script(
+                        'window.scrollTo(document.body.scrollWidth/2 - 200 , 0)')
+                # 取出iframe中二维码，并发往钉钉
+                QRcode_src = self.getQRcode()
+                img = self.base64_to_image(base64_str=QRcode_src)
+                decocdeQR = decode(img)
+                url = "dtxuexi://appclient/page/study_feeds?url=" + \
+                    urllib.parse.quote(decocdeQR[0].data.decode('ascii'))
                 if xue_cfg["push"]["PushMode"] == "2":
                     print("二维码将发往钉钉机器人...\n" + "=" * 60)
                     URID = self.sendDingDing(msg=url, mode="link")
@@ -169,8 +170,12 @@ class XCore:
                     save_user_cookies(cookies, userID)
                     return cookies, URID
                 except Exception as e:
-                    print("等待扫描超时。")
+                    print("等待扫描超时，等待再次重试")
                     tryCount = tryCount + 1
+                    if xue_cfg["base"]["tryloginsleep"] is not None:
+                        time.sleep(int(xue_cfg["base"]["tryloginsleep"]))
+            print("登录超时，退出程序")
+            os._exit(0)
         except KeyError as e:
             print("生成二维码登录失败，请手动扫描二维码登陆...")
             URID = 0

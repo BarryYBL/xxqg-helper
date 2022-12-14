@@ -7,7 +7,7 @@ RUN apk update && \
     apk add --no-cache ttf-dejavu fontconfig && mkfontscale && mkfontdir && fc-cache && \
     apk add --no-cache zbar && \
 	apk add --no-cache bash && \
-	apk add --no-cache py3-pip python3 && \
+	apk add --no-cache py3-pip python3 python3-dev && \
 	apk add --no-cache libxml2-dev libxslt-dev libffi-dev gcc musl-dev libgcc openssl-dev curl && \
 	apk add --no-cache jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev && \	
     apk add --no-cache chromium && \
@@ -28,7 +28,7 @@ COPY requirements.txt /data/XueQG/requirements.txt
 ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN cd /data/XueQG && \
-    pip install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
+    pip install -r requirements.txt
 
 WORKDIR /data/XueQG
 CMD ["python3", "XueQG.py"]
