@@ -28,13 +28,13 @@
 > 
 > **x86-64架构**
 > 
-> `docker pull trustyboy/xxqg-helper:latest
-> docker run -d -it --name=xxqg -e ModeType=3 -e PushMode=2 -e DDtoken=钉钉token -e DDsecret=钉钉secret -e maxtrylogin=3 -e tryloginsleep=60 trustyboy/xxqg-helper:latest`
+> `docker pull trustyboy/xxqg-helper:latest`
+> `docker run -d -it --name=xxqg -e ModeType=3 -e PushMode=2 -e DDtoken=钉钉token -e DDsecret=钉钉secret -e maxtrylogin=3 -e tryloginsleep=60 trustyboy/xxqg-helper:latest`
 > 
 > **arm64架构**
 > 
-> `docker pull trustyboy/xxqg-helper-arm64:latest
-> docker run -d -it --name=xxqg -e ModeType=3 -e PushMode=2 -e DDtoken=钉token -e DDsecret=钉钉secret -e maxtrylogin=3 -e tryloginsleep=60 trustyboy/xxqg-helper-arm64:latest`
+> `docker pull trustyboy/xxqg-helper-arm64:latest`
+> `docker run -d -it --name=xxqg -e ModeType=3 -e PushMode=2 -e DDtoken=钉token -e DDsecret=钉钉secret -e maxtrylogin=3 -e tryloginsleep=60 trustyboy/xxqg-helper-arm64:latest`
 
 # 免责声明
 
