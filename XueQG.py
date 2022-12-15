@@ -80,7 +80,7 @@ if __name__ == '__main__':
             print("=" * 60)
             multiThreading_mode = xue_cfg["base"]["multiThreading"]
     except Exception as e:
-        multiThreading_mode = input("请选择模式（输入对应数字）并回车: ") or 1
+        multiThreading_mode = 1
         print("=" * 60)
 
     article_thread = threads.MyThread(

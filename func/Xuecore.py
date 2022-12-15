@@ -166,9 +166,8 @@ class XCore:
                     WebDriverWait(self.driver, 120, 1).until(
                         EC.title_is(u"我的学习"))
                     cookies = self.driver.get_cookies()
-                    userID, userName = get_userInfo(cookies)
-                    if xue_cfg["base"]["SetUser"] == "1":
-                        save_user_cookies(cookies, userID)
+                    userID, userName = get_userInfo(cookies)                    
+                    save_user_cookies(cookies, userID)
                     return cookies, URID
                 except Exception as e:
                     print("等待扫描超时，等待再次重试")

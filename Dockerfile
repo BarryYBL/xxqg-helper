@@ -3,13 +3,13 @@ ENV TZ Asia/Shanghai
 ENV LC_ALL=zh_CN.UTF-8
 
 RUN apk update && \
-	apk add --no-cache bash && \
-	apk add --no-cache py3-pip python3 python3-dev && \
-	apk add --no-cache libxml2-dev libxslt-dev libffi-dev gcc musl-dev libgcc openssl-dev curl && \
-	apk add --no-cache jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev && \	
+    apk add --no-cache bash && \
+    apk add --no-cache py3-pip python3 python3-dev && \
+    apk add --no-cache libxml2-dev libxslt-dev libffi-dev gcc musl-dev libgcc openssl-dev curl && \
+    apk add --no-cache jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev && \   
     rm -rf /var/cache/apk/* && \
     mkdir -p /data/XueQG/Config 
-	
+    
 COPY Config/Config.cfg /data/XueQG/Config/Config.cfg
 COPY answers /data/XueQG/answers
 COPY func /data/XueQG/func
@@ -21,11 +21,11 @@ ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN cd /data/XueQG && \
     pip install -r requirements.txt && \
-	pyinstaller -F XueQG.py
+    pyinstaller -F XueQG.py
 
 FROM alpine:latest
 ENV TZ Asia/Shanghai
-ENV LC_ALL=zh_CN.UTF-8	
+ENV LC_ALL=zh_CN.UTF-8  
 
 RUN apk update && \
     apk add --no-cache tzdata && cp /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone && \
@@ -36,7 +36,7 @@ RUN apk update && \
     sed -i "s/\$cdc_/\$abc_/" /usr/lib/chromium/chromedriver && \
     rm -rf /var/cache/apk/* && \
     mkdir -p /data/XueQG/Config && \
-	cd /data/XueQG
+    cd /data/XueQG
 
 COPY Config/Config.cfg /data/XueQG/Config/Config.cfg
 COPY --from=builder /data/XueQG/dist/XueQG /data/XueQG/XueQG
