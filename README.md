@@ -35,8 +35,11 @@
 > **获取镜像**
 >
 > ***x86-64架构***
+> 
 > `docker pull trustyboy/xxqg-helper:latest`
+>
 > ***arm64架构***
+> 
 > `docker pull trustyboy/xxqg-helper-arm64:latest`
 
 > **参数说明**
@@ -57,6 +60,7 @@
 >
 > `DDtoken` 钉钉token `DDsecret` 钉钉secret
 > 钉钉机器人接入方式请参考 https://developers.dingtalk.com/document/app/custom-robot-access/title-72m-8ag-pqw
+> 
 > `PPtoken` PlusPush token 接入方式请参考http://www.pushplus.plus/push1.html
 >
 > `maxtrylogin` 登录二维码发送次数
