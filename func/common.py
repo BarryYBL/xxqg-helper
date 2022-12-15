@@ -11,7 +11,7 @@ from requests.cookies import RequestsCookieJar
 from configparser import ConfigParser
 from func import color
 from func.dingding import DingDingHandler
-from func.plushpush import PlusPushHandler
+from func.pluspush import PlusPushHandler
 
 
 def get_appsyspatch():

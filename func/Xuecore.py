@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from func.dingding import DingDingHandler
-from func.plushpush import PlusPushHandler
+from func.pluspush import PlusPushHandler
 from pyzbar.pyzbar import decode
 from PIL import Image
 from io import BytesIO
