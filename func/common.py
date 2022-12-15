@@ -11,6 +11,7 @@ from requests.cookies import RequestsCookieJar
 from configparser import ConfigParser
 from func import color
 from func.dingding import DingDingHandler
+from func.pluspush import PlusPushHandler
 
 
 def get_appsyspatch():
@@ -46,12 +47,16 @@ def load_config(nologo=False):
             xue_cfg.set("base", "maxtrylogin", os.environ.get("maxtrylogin"))
         if os.environ.get("tryloginsleep") is not None:
             xue_cfg.set("base", "tryloginsleep", os.environ.get("tryloginsleep"))
+        if os.environ.get("SetUser") is not None:
+            xue_cfg.set("base", "SetUser", os.environ.get("SetUser"))
         if os.environ.get("PushMode") is not None:
             xue_cfg.set("push", "PushMode", os.environ.get("PushMode"))
         if os.environ.get("DDtoken") is not None:
             xue_cfg.set("push", "DDtoken", os.environ.get("DDtoken"))
         if os.environ.get("DDsecret") is not None:
             xue_cfg.set("push", "DDsecret", os.environ.get("DDsecret"))
+        if os.environ.get("PPtoken") is not None:
+            xue_cfg.set("push", "PPtoken", os.environ.get("PPtoken"))
     return xue_cfg
 
 
@@ -92,15 +97,24 @@ def get_time():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 
-def sendDingDing(msg):
+def sendMessage(msg):
     xue_cfg = load_config(True)
-    token = xue_cfg["push"]["DDtoken"]
-    secret = xue_cfg["push"]["DDsecret"]
-    if token is not None and secret is not None:
-        ddhandler = DingDingHandler(token, secret)
-        ddhandler.ddmsgsend(msg, "msg")
-    else:
-        print("钉钉token未设置，取消发送消息")
+    if xue_cfg["push"]["PushMode"] == "2":
+        token = xue_cfg["push"]["DDtoken"]
+        secret = xue_cfg["push"]["DDsecret"]
+        if token is not None and secret is not None:
+            ddhandler = DingDingHandler(token, secret)
+            ddhandler.ddmsgsend(msg, "msg")
+        else:
+            print("钉钉token未设置，取消发送消息")
+    elif xue_cfg["push"]["PushMode"] == "3":
+        token = xue_cfg["push"]["PPtoken"]
+        if token is not None:
+            ddhandler = PlusPushHandler(token)
+            ddhandler.ppmsgsend(msg, "msg")
+        else:
+            print("PlusPush token未设置，取消发送消息")
+
 
 
 def load_logo():
