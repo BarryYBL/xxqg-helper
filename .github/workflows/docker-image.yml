@@ -1,9 +1,8 @@
 name: Docker Image CI
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    tags:
+    - "v*"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,5 +24,5 @@ jobs:
       with:
           context: .
           push: true
-          platforms: linux/amd64,linux/arm64
-          tags: trustyboy/xxqg-helper-dev:latest   
+          platforms: linux/amd64,linux/arm64,linux/arm
+          tags: trustyboy/xxqg-helper-dev:${{ github.ref }}   
