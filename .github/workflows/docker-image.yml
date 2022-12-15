@@ -11,7 +11,7 @@ jobs:
       with:
         submodules: 'true'
     - name: Get Release Tag
-      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV && echo ${{ env.RELEASE_VERSION }}
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
     - name: Set up Docker Buildx
@@ -27,4 +27,4 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64,linux/arm
-          tags: trustyboy/xxqg-helper-dev:${{ env.RELEASE_VERSION }} 
+          tags: trustyboy/xxqg-helper:${{ env.RELEASE_VERSION }} 
