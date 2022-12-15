@@ -23,7 +23,7 @@ class PlusPushHandler:
                 "token": self.token,
                 "title": "学习强国登录",
                 "template": "markdown",
-                "content": "因微信限制，无法直接在本消息中打开学习强国App。\n请点击右下角按钮复制Web地址到浏览器中打开（注意去掉地址前的两个斜杠），然后点击以下链接打开学习强国：\n [点击此处打开强国App进行登录](%s)" % msg
+                "content": "因PlusPush无法直接在本消息中打开学习强国App。\n请点击右下角按钮复制Web地址到浏览器中打开（注意去掉地址前的两个斜杠），然后点击以下链接打开学习强国：\n [点击此处打开强国App进行登录](%s)" % msg
             }
         else:
             data = {

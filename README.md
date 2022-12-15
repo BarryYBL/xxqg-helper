@@ -6,6 +6,14 @@
 
 # 更新日志
 
+**2022/12/15**
+
+> 1、支持PlusPush消息推送
+> 
+> 2、支持SetUser开关用于控制是否保存用户登录信息
+> 
+> 3、优化Docker镜像大小
+
 **2022/12/14**
 
 > 1、支持二维码多次推送设置
@@ -24,17 +32,50 @@
 
 # 使用方式
 
-> **目前只修复钉钉推送登录，其他方式暂未测试**
-> 
-> **x86-64架构**
-> 
+> **获取镜像**
+>
+> ***x86-64架构***
 > `docker pull trustyboy/xxqg-helper:latest`
-> `docker run -d -it --name=xxqg -e ModeType=3 -e PushMode=2 -e DDtoken=钉钉token -e DDsecret=钉钉secret -e maxtrylogin=3 -e tryloginsleep=60 trustyboy/xxqg-helper:latest`
-> 
-> **arm64架构**
-> 
+> ***arm64架构***
 > `docker pull trustyboy/xxqg-helper-arm64:latest`
-> `docker run -d -it --name=xxqg -e ModeType=3 -e PushMode=2 -e DDtoken=钉token -e DDsecret=钉钉secret -e maxtrylogin=3 -e tryloginsleep=60 trustyboy/xxqg-helper-arm64:latest`
+
+> **参数说明**
+>
+> 以下参数均支持 -e 以环境变量方式传入
+>
+> `ModeType` 答题模式 
+>
+> ``````
+> 1、文章 + 视频
+> 2、文章 + 视频 + 每日答题（★默认）
+> 3、文章 + 视频 + 每日答题 + 每周答题 + 专项答题
+> 4、每日答题 + 每周答题 + 专项答题
+> ``````
+> `PushMode` 消息推送模式
+>
+> 2 表示 钉钉，3 表示 PlusPush，0表示不开启
+>
+> `DDtoken` 钉钉token `DDsecret` 钉钉secret
+> 钉钉机器人接入方式请参考 https://developers.dingtalk.com/document/app/custom-robot-access/title-72m-8ag-pqw
+> `PPtoken` PlusPush token 接入方式请参考http://www.pushplus.plus/push1.html
+>
+> `maxtrylogin` 登录二维码发送次数
+>
+> `tryloginsleep` 登录二维码发送间隔，单位秒
+>
+> `SetUser` 是否保存用户登录信息 0 表示否 1表示是
+
+> **钉钉消息通知示例**
+> 
+>```shell
+> docker run -d -it --name=xxqg -e ModeType=3 -e PushMode=2 -e DDtoken=钉token -e DDsecret=钉钉secret -e maxtrylogin=3 -e tryloginsleep=60 -e SetUser=1 trustyboy/xxqg-helper:latest
+> ```
+
+> **PlusPush消息通知示例**
+> 
+>```shell
+> docker run -d -it --name=xxqg -e ModeType=3 -e PushMode=3 -e PPtoken=PlusPushtoken -e maxtrylogin=3 -e tryloginsleep=60 -e SetUser=1 trustyboy/xxqg-helper:latest
+> ```
 
 # 免责声明
 

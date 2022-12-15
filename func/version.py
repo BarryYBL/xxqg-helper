@@ -18,7 +18,7 @@ def up_info():
     __INFO = "By Kenf, alex"
     try:
         update_log = requests.get(
-            "https://raw.githubusercontent.com/trustyboy/xxqg-helper/master/Config/Update.html").content.decode("utf8")
+            "https://www.fzwise.com/xxqg-helper/Update.html").content.decode("utf8")
         update_log = update_log.split("\n")
         print(color.yellow("[*] " + __INFO))
         print(color.yellow("[*] 程序版本为：{}".format(__Version)))
