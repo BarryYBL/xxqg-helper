@@ -109,8 +109,7 @@ def get_user_status():
 
 
 def save_user_status(status):
-    if xue_cfg["base"]["SetUser"] == "1":
-        save_json_data(get_appsyspatch()+"/User/user_status.json", status)
+    save_json_data(get_appsyspatch()+"/User/user_status.json", status)
 
 
 def select_user(multiuser=0):
