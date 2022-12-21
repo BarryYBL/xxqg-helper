@@ -23,6 +23,7 @@ class XCore:
 
         try:
             self.options = Options()
+            self.nohead = nohead
             # 判断Chrome 位置，linux&macos 后期再加入输入参数，暂时统一处理
             if os.path.exists(get_appsyspatch() + "\App\chrome.exe"):
                 chrome_app_path = get_appsyspatch() + "\App\chrome.exe"
@@ -153,23 +154,34 @@ class XCore:
                 else:
                     self.driver.execute_script(
                         'arguments[0].remove()', remover)
+                try:
+                    remover = WebDriverWait(self.driver, 30, 0.2).until(
+                        lambda driver: driver.find_element_by_class_name("oath"))
+                except exceptions.TimeoutException:
+                    print("当前网络缓慢...")
+                else:
+                    self.driver.execute_script(
+                        'arguments[0].remove()', remover)
                     self.driver.execute_script(
                         'window.scrollTo(document.body.scrollWidth/2 - 200 , 0)')
                 # 取出iframe中二维码，并发往钉钉
-                QRcode_src = self.getQRcode()
-                img = self.base64_to_image(base64_str=QRcode_src)
-                decocdeQR = decode(img)
-                url = "dtxuexi://appclient/page/study_feeds?url=" + \
-                    urllib.parse.quote(decocdeQR[0].data.decode('ascii'))
-                print("发送二维码...\n" + "=" * 60)
-                URID = self.sendMessage(msg=url, mode="link")
+                if self.nohead == True:
+                    QRcode_src = self.getQRcode()
+                    img = self.base64_to_image(base64_str=QRcode_src)
+                    decocdeQR = decode(img)
+                    url = "dtxuexi://appclient/page/study_feeds?url=" + \
+                        urllib.parse.quote(decocdeQR[0].data.decode('ascii'))
+                    print("发送二维码...\n" + "=" * 60)
+                    URID = self.sendMessage(msg=url, mode="link")
+                else:
+                    print("等待用户扫描二维码...\n" + "=" * 60)
                 try:
                     WebDriverWait(self.driver, 120, 1).until(
                         EC.title_is(u"我的学习"))
                     cookies = self.driver.get_cookies()
                     userID, userName = get_userInfo(cookies)                    
                     save_user_cookies(cookies, userID)
-                    return cookies, URID
+                    return cookies, None
                 except Exception as e:
                     print("等待扫描超时，等待再次重试")
                     tryCount = tryCount + 1

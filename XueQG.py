@@ -5,6 +5,7 @@ from func.Xuecore import XCore
 from func import score, user, version, threads
 from study import reader
 from answers.respond import *
+import platform
 
 if __name__ == '__main__':
 
@@ -33,7 +34,10 @@ if __name__ == '__main__':
         cookies = user.check_user_cookie()
 
     if not cookies or user_list == 2:
-        driver_login = XCore(noimg=False, nohead=True, nofake=False)
+        nohead = True
+        if platform.system().lower() == 'windows':
+            nohead = False
+        driver_login = XCore(noimg=False, nohead=nohead, nofake=False)
         cookies, QRID = driver_login.logging()
         driver_login.quit()
 
