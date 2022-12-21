@@ -179,13 +179,13 @@ class XCore:
                     WebDriverWait(self.driver, 120, 1).until(
                         EC.title_is(u"我的学习"))
                     cookies = self.driver.get_cookies()
-                    userID, userName = get_userInfo(cookies)                    
+                    userID, userName = get_userInfo(cookies)
                     save_user_cookies(cookies, userID)
                     return cookies, None
                 except Exception as e:
                     print("等待扫描超时，等待再次重试")
                     tryCount = tryCount + 1
-                    if xue_cfg["base"]["tryloginsleep"] is not None:
+                    if xue_cfg.has_option("base", "tryloginsleep"):
                         time.sleep(int(xue_cfg["base"]["tryloginsleep"]))
             print("登录超时，退出程序")
             os._exit(0)

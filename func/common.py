@@ -12,6 +12,7 @@ from configparser import ConfigParser
 from func import color
 from func.dingding import DingDingHandler
 from func.pluspush import PlusPushHandler
+import platform
 
 
 def get_appsyspatch():
@@ -46,9 +47,15 @@ def load_config(nologo=False):
         if os.environ.get("maxtrylogin") is not None:
             xue_cfg.set("base", "maxtrylogin", os.environ.get("maxtrylogin"))
         if os.environ.get("tryloginsleep") is not None:
-            xue_cfg.set("base", "tryloginsleep", os.environ.get("tryloginsleep"))
+            xue_cfg.set("base", "tryloginsleep",
+                        os.environ.get("tryloginsleep"))
         if os.environ.get("SetUser") is not None:
             xue_cfg.set("base", "SetUser", os.environ.get("SetUser"))
+        if os.environ.get("AutoQuit") is not None:
+            xue_cfg.set("base", "AutoQuit", os.environ.get("AutoQuit"))
+        # Windows如果没有配置自动退出，给个默认值
+        if not xue_cfg.has_option("base", "AutoQuit") and platform.system().lower() == 'windows':
+            xue_cfg.set("base", "AutoQuit", "0")
         if os.environ.get("PushMode") is not None:
             xue_cfg.set("push", "PushMode", os.environ.get("PushMode"))
         if os.environ.get("DDtoken") is not None:
@@ -114,7 +121,6 @@ def sendMessage(msg):
             ddhandler.ppmsgsend(msg, "msg")
         else:
             print("PlusPush token未设置，取消发送消息")
-
 
 
 def load_logo():
