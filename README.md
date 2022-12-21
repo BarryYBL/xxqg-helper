@@ -43,7 +43,7 @@
 
 #### Windows版本
 
-> 使用Release里面的bin版本或者直接安装Python环境
+> 使用Release里面的bin版本或者直接安装Python环境，使用前请修改Config/Config.cfg配置好二维码推送方式。
 
 #### Linux版本
 
