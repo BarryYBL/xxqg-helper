@@ -23,23 +23,23 @@ class XCore:
 
         try:
             self.options = Options()
-            # get_appsyspatch()格式为X:\Running
-            #chrome_app_path = get_appsyspatch() + "\App\chrome.exe"
-            #chrome_driver_path = get_appsyspatch() + "\App\chromedriver.exe"
-
             # 判断Chrome 位置，linux&macos 后期再加入输入参数，暂时统一处理
-            if os.path.exists("C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"):  # win
-                chrome_app_path = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+            if os.path.exists(get_appsyspatch() + "\App\chrome.exe"):
+                chrome_app_path = get_appsyspatch() + "\App\chrome.exe"
                 chrome_driver_path = get_appsyspatch() + "\App\chromedriver.exe"
-            elif os.path.exists("/usr/lib/chromium/chromium"):  # linux & macos
-                chrome_app_path = "/usr/lib/chromium/chromium"
-                chrome_driver_path = "/usr/lib/chromium/chromedriver"
-            elif os.path.exists("/usr/lib/chromium/chrome"):  # alpine
-                chrome_app_path = "/usr/lib/chromium/chrome"
-                chrome_driver_path = "/usr/lib/chromium/chromedriver"
             else:
-                print("@启动失败，程序包已损坏")
-                os._exit(0)
+                if os.path.exists("C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"):  # win
+                    chrome_app_path = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+                    chrome_driver_path = get_appsyspatch() + "\App\chromedriver.exe"
+                elif os.path.exists("/usr/lib/chromium/chromium"):  # linux & macos
+                    chrome_app_path = "/usr/lib/chromium/chromium"
+                    chrome_driver_path = "/usr/lib/chromium/chromedriver"
+                elif os.path.exists("/usr/lib/chromium/chrome"):  # alpine
+                    chrome_app_path = "/usr/lib/chromium/chrome"
+                    chrome_driver_path = "/usr/lib/chromium/chromedriver"
+                else:
+                    print("@启动失败，程序包已损坏")
+                    os._exit(0)
             self.options.binary_location = chrome_app_path
             # 初始二维码窗口大小
             windows_size = '--window-size=500,450'
@@ -124,7 +124,8 @@ class XCore:
     def logging(self):
         try:
             tryCount = 1
-            while tryCount < int(xue_cfg["base"]["maxtrylogin"]):
+            maxCount = int(xue_cfg["base"]["maxtrylogin"]) + 1
+            while tryCount < maxCount:
                 print("正在打开二维码登陆界面,请稍后...")
                 self.driver.get("https://pc.xuexi.cn/points/login.html")
                 # 删除登录二维码界面多余元素

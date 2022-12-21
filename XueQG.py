@@ -13,7 +13,7 @@ if __name__ == '__main__':
     xue_cfg = load_config()
     QRID = 0
 
-    if (xue_cfg['display']['banner'] != "false"):
+    if xue_cfg['display']['banner'] != "false":
         print("=" * 60 +
               '\n使用本项目，必须接受以下内容，否则请立即退出：' +
               '\n   - 仅额外提供给“爱党爱国”且“工作学业繁重”的人' +
@@ -49,16 +49,16 @@ if __name__ == '__main__':
             QRmsg = "\n > ###### 使用二维码ID:" + str(QRID)
         # QRmsg = "###### 使用二维码ID:" + str(QRID)
         send_msg = "#### " + nick + "开始学习" + \
-            "\n > ##### 目前学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(scores["today"]) + \
-            "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
-            ", 视听学习:" + str(scores["video_num"]) + "/" + str(scores["video_num_max"]) + \
-            "\n > ###### 文章时长: " + str(scores["article_time"]) + "/" + str(scores["article_time_max"]) + \
-            ", 视听时长:" + str(scores["video_time"]) + "/" + str(scores["video_time_max"]) + \
-            "\n > ###### 每日答题: " + str(scores["daily"]) + "/" + str(scores["daily_max"]) + \
-            ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
-            "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
-            ", 专项答题:" + str(scores["special"]) + "/" + str(scores["special_max"]) + \
-            QRmsg
+                   "\n > ##### 目前学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(scores["today"]) + \
+                   "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
+                   ", 视听学习:" + str(scores["video_num"]) + "/" + str(scores["video_num_max"]) + \
+                   "\n > ###### 文章时长: " + str(scores["article_time"]) + "/" + str(scores["article_time_max"]) + \
+                   ", 视听时长:" + str(scores["video_time"]) + "/" + str(scores["video_time_max"]) + \
+                   "\n > ###### 每日答题: " + str(scores["daily"]) + "/" + str(scores["daily_max"]) + \
+                   ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
+                   "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
+                   ", 专项答题:" + str(scores["special"]) + "/" + str(scores["special_max"]) + \
+                   QRmsg
         sendMessage(send_msg)
     except Exception as e:
         pass
@@ -92,7 +92,7 @@ if __name__ == '__main__':
         # 文章学习线程模式
         # print(article_thread.enumerate())
         if multiThreading_mode == "2" or multiThreading_mode == 2:
-            #print("DEBUG:" + multithreading_mode)
+            # print("DEBUG:" + multithreading_mode)
             article_thread.start()
             time.sleep(2)
             video_thread.start()
@@ -129,16 +129,17 @@ if __name__ == '__main__':
     scores = score.get_userScore(cookies)
     # 学习结束情况发送到钉钉
     try:
-        send_msg = "#### " + nick + "学习结束 \n > ##### 学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(scores["today"]) + \
-            "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
-            ", 视听学习:" + str(scores["video_num"]) + "/" + str(scores["video_num_max"]) + \
-            "\n > ###### 文章时长: " + str(scores["article_time"]) + "/" + str(scores["article_time_max"]) + \
-            ", 视听时长:" + str(scores["video_time"]) + "/" + str(scores["video_time_max"]) + \
-            "\n > ###### 每日答题: " + str(scores["daily"]) + "/" + str(scores["daily_max"]) + \
-            ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
-            "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
-            ", 专项答题:" + str(scores["special"]) + \
-            "/" + str(scores["special_max"])
+        send_msg = "#### " + nick + "学习结束 \n > ##### 学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(
+            scores["today"]) + \
+                   "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
+                   ", 视听学习:" + str(scores["video_num"]) + "/" + str(scores["video_num_max"]) + \
+                   "\n > ###### 文章时长: " + str(scores["article_time"]) + "/" + str(scores["article_time_max"]) + \
+                   ", 视听时长:" + str(scores["video_time"]) + "/" + str(scores["video_time_max"]) + \
+                   "\n > ###### 每日答题: " + str(scores["daily"]) + "/" + str(scores["daily_max"]) + \
+                   ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
+                   "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
+                   ", 专项答题:" + str(scores["special"]) + \
+                   "/" + str(scores["special_max"])
         sendMessage(send_msg)
     except Exception as e:
         pass
