@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     if not cookies or user_list == 2:
         nohead = True
-        if platform.system().lower() == 'windows' and xue_cfg["push"]["PushMode"] == 0:
+        if platform.system().lower() == 'windows' and xue_cfg["push"]["PushMode"] == '0':
             nohead = False
         driver_login = XCore(noimg=False, nohead=nohead, nofake=False)
         cookies, QRID = driver_login.logging()
