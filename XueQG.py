@@ -5,6 +5,7 @@ from func.Xuecore import XCore
 from func import score, user, version, threads
 from study import reader
 from answers.respond import *
+import platform
 
 if __name__ == '__main__':
 
@@ -33,7 +34,10 @@ if __name__ == '__main__':
         cookies = user.check_user_cookie()
 
     if not cookies or user_list == 2:
-        driver_login = XCore(noimg=False, nohead=True, nofake=False)
+        nohead = True
+        if platform.system().lower() == 'windows' and xue_cfg["push"]["PushMode"] == '0':
+            nohead = False
+        driver_login = XCore(noimg=False, nohead=nohead, nofake=False)
         cookies, QRID = driver_login.logging()
         driver_login.quit()
 
@@ -131,15 +135,15 @@ if __name__ == '__main__':
     try:
         send_msg = "#### " + nick + "学习结束 \n > ##### 学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(
             scores["today"]) + \
-                   "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
-                   ", 视听学习:" + str(scores["video_num"]) + "/" + str(scores["video_num_max"]) + \
-                   "\n > ###### 文章时长: " + str(scores["article_time"]) + "/" + str(scores["article_time_max"]) + \
-                   ", 视听时长:" + str(scores["video_time"]) + "/" + str(scores["video_time_max"]) + \
-                   "\n > ###### 每日答题: " + str(scores["daily"]) + "/" + str(scores["daily_max"]) + \
-                   ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
-                   "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
-                   ", 专项答题:" + str(scores["special"]) + \
-                   "/" + str(scores["special_max"])
+            "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
+            ", 视听学习:" + str(scores["video_num"]) + "/" + str(scores["video_num_max"]) + \
+            "\n > ###### 文章时长: " + str(scores["article_time"]) + "/" + str(scores["article_time_max"]) + \
+            ", 视听时长:" + str(scores["video_time"]) + "/" + str(scores["video_time_max"]) + \
+            "\n > ###### 每日答题: " + str(scores["daily"]) + "/" + str(scores["daily_max"]) + \
+            ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
+            "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
+            ", 专项答题:" + str(scores["special"]) + \
+            "/" + str(scores["special_max"])
         sendMessage(send_msg)
     except Exception as e:
         pass
@@ -148,3 +152,6 @@ if __name__ == '__main__':
     print("总计用时 " + str(math.floor(seconds_used / 60)) +
           " 分 " + str(seconds_used % 60) + " 秒")
     print("本次学习已执行完成")
+
+    if xue_cfg["base"]["AutoQuit"] == "0" and platform.system().lower() == 'windows':
+        os.system("pause")
