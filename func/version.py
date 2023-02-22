@@ -13,7 +13,7 @@ def compare_version(ver1, ver2):
 def up_info():
     print(color.yellow("[*] 正在联网获取更新信息..."))
 
-    __Version = "v20221221"
+    __Version = "v20220222"
 
     __INFO = "By Kenf, Alex"
     try:

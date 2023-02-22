@@ -63,11 +63,16 @@ def check_user_cookie(userID=None):
         "=" * 60, "\n当前用户ID:{0[0]}，当前用户名称:{0[1]}".format(print_list), end=" ")
     # 检查Cookie是否生效
     cookies = get_user_cookie(userID)
-    if not cookies:
+    if len(cookies) == 0:
+        print(color.red("[*]Cookie信息失效，需登录"))
+        return []
+    delta_seconds = get_cookie_expire_second(cookies)
+    if delta_seconds <= 0:
         print(color.red("[*]Cookie信息失效，需登录"))
         return []
     else:
-        print(color.green("[*]Cookie信息生效中"))
+        delta_hours = round(delta_seconds / 3600)
+        print(color.green("[*]Cookie信息生效中，大约剩余%d小时" % delta_hours))
         return cookies
 
 
@@ -168,12 +173,13 @@ def get_user_cookie(userID):
             cookies_b64 = cookies_json_obj[i]
             cookies_bytes = base64.b64decode(cookies_b64)
             cookie_list = pickle.loads(cookies_bytes)
-            for d in cookie_list:
-                if 'name' in d and 'value' in d and 'expiry' in d:
-                    expiry_date = int(d['expiry'])
-                    if expiry_date > (int)(time.time()):
-                        pass
-                    else:
-                        return []
             return cookie_list
     return []
+
+
+def get_cookie_expire_second(cookie):
+    for d in cookie:
+        if 'name' in d and 'value' in d and 'expiry' in d:
+            expiry_date = int(d['expiry'])
+            return expiry_date - (int)(time.time())
+    return 0

@@ -109,25 +109,30 @@ if __name__ == '__main__':
             article_thread.run()
             video_thread.run()
 
-    if XueQG_mode in ["2", "3", "4"]:
-        print(color.yellow("[*]") + ' 开始每日答题……')
-        respond("daily", cookies, scores)
-    if XueQG_mode in ["3", "4"]:
-        if scores["weekly"] == 0:
-            print(color.yellow("[*]") + ' 开始每周答题……')
-            respond("weekly", cookies, scores)
-        elif scores["weekly_max"] > scores["weekly"] > 0:
-            print(color.magenta("[*]") + ' 检测到今天每周已答题但未满分，已退出')
-        elif scores["weekly_max"] == scores["weekly"]:
-            print(color.yellow("[*] ") + "每周答题已经满分")
+    try:
+        if XueQG_mode in ["2", "3", "4"]:
+            print(color.yellow("[*]") + ' 开始每日答题……')
+            respond("daily", cookies, scores)
+        if XueQG_mode in ["3", "4"]:
+            if scores["weekly"] == 0:
+                print(color.yellow("[*]") + ' 开始每周答题……')
+                respond("weekly", cookies, scores)
+            elif scores["weekly_max"] > scores["weekly"] > 0:
+                print(color.magenta("[*]") + ' 检测到今天每周已答题但未满分，已退出')
+            elif scores["weekly_max"] == scores["weekly"]:
+                print(color.yellow("[*] ") + "每周答题已经满分")
 
-        if scores["special"] == 0:
-            print(color.yellow("[*]") + ' 开始专项答题……')
-            respond("special", cookies, scores)
-        elif scores["special_max"] > scores["special"] > 0:
-            print(color.magenta("[*]") + ' 检测到今天专项已答题但未满分，已退出')
-        elif scores["special_max"] == scores["special"]:
-            print(color.yellow("[*] ") + "专项答题已经满分")
+            if scores["special"] == 0:
+                print(color.yellow("[*]") + ' 开始专项答题……')
+                respond("special", cookies, scores)
+            elif scores["special_max"] > scores["special"] > 0:
+                print(color.magenta("[*]") + ' 检测到今天专项已答题但未满分，已退出')
+            elif scores["special_max"] == scores["special"]:
+                print(color.yellow("[*] ") + "专项答题已经满分")
+    except Exception as e:
+        print("答题过程发生错误：" + str(e))
+        sendMessage("答题过程发生错误")
+        os._exit(1000)
 
     # 已在答题中执行刷新分数
     scores = score.get_userScore(cookies)
