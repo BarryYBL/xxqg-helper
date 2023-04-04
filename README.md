@@ -133,3 +133,5 @@
 # 鸣谢
 
 参考源码项目来自https://github.com/imkenf/XueQG
+
+[JetBrains](https://jb.gg/OpenSourceSupport) 提供的IDE支持
