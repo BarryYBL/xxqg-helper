@@ -179,7 +179,7 @@ def get_user_cookie(userID):
 
 def get_cookie_expire_second(cookie):
     for d in cookie:
-        if 'name' in d and 'value' in d and 'expiry' in d:
+        if 'name' in d and 'value' in d and 'expiry' in d and d['name'] == 'token':
             expiry_date = int(d['expiry'])
             return expiry_date - (int)(time.time())
     return 0

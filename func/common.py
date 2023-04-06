@@ -51,9 +51,10 @@ def load_config(nologo=False):
                         os.environ.get("tryloginsleep"))
         if os.environ.get("SetUser") is not None:
             xue_cfg.set("base", "SetUser", os.environ.get("SetUser"))
-        xue_cfg.set("base", "AutoQuit", "0")
         if os.environ.get("AutoQuit") is not None:
-            xue_cfg.set("base", "AutoQuit", os.environ.get("AutoQuit"))           
+            xue_cfg.set("base", "AutoQuit", os.environ.get("AutoQuit"))
+        if not xue_cfg.has_option("base", "AutoQuit"):
+            xue_cfg.set("base", "AutoQuit", "0")
         if os.environ.get("PushMode") is not None:
             xue_cfg.set("push", "PushMode", os.environ.get("PushMode"))
         if os.environ.get("DDtoken") is not None:

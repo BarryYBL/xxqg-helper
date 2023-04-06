@@ -41,17 +41,23 @@ if __name__ == '__main__':
         cookies, QRID = driver_login.logging()
         driver_login.quit()
 
+    delta_seconds = user.get_cookie_expire_second(cookies)
+    delta_hours = round(delta_seconds / 3600)
+    if delta_seconds <= 0:
+        send_msg = "获取到的Cookie无效"
+        print(color.red(send_msg))
+        sendMessage(send_msg)
+        os._exit(0)
+    else:
+        print(color.green("[*]Cookie信息生效中，大约剩余%d小时" % delta_hours))
+
     uid, nick = user.get_userInfo(cookies)
     user.update_last_user(uid)
     # 查询用户今天分数
     scores = score.show_userScore(cookies)
     # 学习情况发送到钉钉
     try:
-        if QRID == 0:
-            QRmsg = ""
-        else:
-            QRmsg = "\n > ###### 使用二维码ID:" + str(QRID)
-        # QRmsg = "###### 使用二维码ID:" + str(QRID)
+        cookie_expire_msg = "\n > ###### Cookie有效时长:" + str(delta_hours) + "小时"
         send_msg = "#### " + nick + "开始学习" + \
                    "\n > ##### 目前学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(scores["today"]) + \
                    "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
@@ -62,7 +68,7 @@ if __name__ == '__main__':
                    ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
                    "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
                    ", 专项答题:" + str(scores["special"]) + "/" + str(scores["special_max"]) + \
-                   QRmsg
+                   cookie_expire_msg
         sendMessage(send_msg)
     except Exception as e:
         pass
@@ -140,15 +146,15 @@ if __name__ == '__main__':
     try:
         send_msg = "#### " + nick + "学习结束 \n > ##### 学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(
             scores["today"]) + \
-            "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
-            ", 视听学习:" + str(scores["video_num"]) + "/" + str(scores["video_num_max"]) + \
-            "\n > ###### 文章时长: " + str(scores["article_time"]) + "/" + str(scores["article_time_max"]) + \
-            ", 视听时长:" + str(scores["video_time"]) + "/" + str(scores["video_time_max"]) + \
-            "\n > ###### 每日答题: " + str(scores["daily"]) + "/" + str(scores["daily_max"]) + \
-            ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
-            "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
-            ", 专项答题:" + str(scores["special"]) + \
-            "/" + str(scores["special_max"])
+                   "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
+                   ", 视听学习:" + str(scores["video_num"]) + "/" + str(scores["video_num_max"]) + \
+                   "\n > ###### 文章时长: " + str(scores["article_time"]) + "/" + str(scores["article_time_max"]) + \
+                   ", 视听时长:" + str(scores["video_time"]) + "/" + str(scores["video_time_max"]) + \
+                   "\n > ###### 每日答题: " + str(scores["daily"]) + "/" + str(scores["daily_max"]) + \
+                   ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
+                   "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
+                   ", 专项答题:" + str(scores["special"]) + \
+                   "/" + str(scores["special_max"])
         sendMessage(send_msg)
     except Exception as e:
         pass
