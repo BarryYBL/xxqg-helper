@@ -48,7 +48,7 @@ class DingDingHandler:
                     "title": "学习强国扫码登录",
                     "text": "点击打开强国App进行登录",
                     "picUrl": "",
-                    "messageUrl": msg
+                    "messageUrl": msg["url"]
                 }
             }
         else:
@@ -62,6 +62,10 @@ class DingDingHandler:
         try:
             res = requests.post(
                 self.get_url(), data=json.dumps(data), headers=headers)
+            resObj = res.json()
+            if resObj["errcode"] != 0:
+                raise Exception("钉钉发送失败：" + resObj["errmsg"])
             print("已通过钉钉机器人发送成功")
         except Exception as e:
             print("发送失败. 错误信息: " + str(e))
+            raise e

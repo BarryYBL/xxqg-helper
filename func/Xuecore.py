@@ -172,7 +172,7 @@ class XCore:
                     url = "dtxuexi://appclient/page/study_feeds?url=" + \
                         urllib.parse.quote(decocdeQR[0].data.decode('ascii'))
                     print("发送二维码...\n" + "=" * 60)
-                    URID = self.sendMessage(msg=url, mode="link")
+                    URID = self.sendMessage(msg={"url": url, "qrcode": QRcode_src}, mode="link")
                 else:
                     print("等待用户扫描二维码...\n" + "=" * 60)
                 try:

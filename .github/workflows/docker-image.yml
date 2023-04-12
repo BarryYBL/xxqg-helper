@@ -21,17 +21,10 @@ jobs:
       with:     
        username: ${{ secrets.DOCKERHUB_USERNAME }}
        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-    - name: Build and push - amd64
+    - name: Build and push
       uses: docker/build-push-action@v3
       with:
           context: .
           push: true
-          platforms: linux/amd64
-          tags: trustyboy/xxqg-helper:${{ env.RELEASE_VERSION }} 
-    - name: Build and push - arm64
-      uses: docker/build-push-action@v3
-      with:
-          context: .
-          push: true
-          platforms: linux/arm64
-          tags: trustyboy/xxqg-helper-arm64:${{ env.RELEASE_VERSION }} 
+          platforms: linux/amd64,linux/arm64
+          tags: trustyboy/xxqg-helper:${{ env.RELEASE_VERSION }}

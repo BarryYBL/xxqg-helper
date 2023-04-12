@@ -19,7 +19,7 @@ if __name__ == '__main__':
               '\n使用本项目，必须接受以下内容，否则请立即退出：' +
               '\n   - 仅额外提供给“爱党爱国”且“工作学业繁重”的人' +
               '\n   - 此项目运行过程中自动记录学习内容，可过后再次学习' +
-              '\n   - 项目开源协议 LGPL-3.0' +
+              '\n   - 项目开源协议 MIT' +
               '\n   - 仅限内部交流，不允许外传' +
               '\n   - 不得利用本项目盈利' +
               "\n" + "=" * 60)
@@ -34,12 +34,28 @@ if __name__ == '__main__':
         cookies = user.check_user_cookie()
 
     if not cookies or user_list == 2:
-        nohead = True
-        if platform.system().lower() == 'windows' and xue_cfg["push"]["PushMode"] == '0':
-            nohead = False
-        driver_login = XCore(noimg=False, nohead=nohead, nofake=False)
-        cookies, QRID = driver_login.logging()
-        driver_login.quit()
+        try:
+            nohead = True
+            if platform.system().lower() == 'windows' and xue_cfg["push"]["PushMode"] == '0':
+                nohead = False
+            driver_login = XCore(noimg=False, nohead=nohead, nofake=False)
+            cookies, QRID = driver_login.logging()
+            driver_login.quit()
+        except Exception as e:
+            print("登录过程发生错误：" + str(e))
+            sendMessage("登录过程发生错误")
+            os._exit(1001)
+
+
+    delta_seconds = user.get_cookie_expire_second(cookies)
+    delta_hours = round(delta_seconds / 3600)
+    if delta_seconds <= 0:
+        send_msg = "获取到的Cookie无效"
+        print(color.red(send_msg))
+        sendMessage(send_msg)
+        os._exit(0)
+    else:
+        print(color.green("[*]Cookie信息生效中，大约剩余%d小时" % delta_hours))
 
     delta_seconds = user.get_cookie_expire_second(cookies)
     delta_hours = round(delta_seconds / 3600)
