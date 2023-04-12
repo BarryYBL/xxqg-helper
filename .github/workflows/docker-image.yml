@@ -27,4 +27,4 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: trustyboy/xxqg-helper:${{ env.RELEASE_VERSION }}
+          tags: trustyboy/xxqg-helper:${{ env.RELEASE_VERSION }},trustyboy/xxqg-helper:latest
