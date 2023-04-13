@@ -39,7 +39,7 @@ class PlusPushHandler:
             res = requests.post(
                 "http://www.pushplus.plus/send", data=json.dumps(data), headers=headers)
             resObj = res.json()
-            if resObj["code"] != "200":
+            if resObj["code"] != 200:
                 raise Exception("PlusPush发送失败：" + resObj["msg"])
             print("已通过PlusPush发送成功")
         except Exception as e:
