@@ -18,6 +18,7 @@ FROM trustyboy/xxqg-selenium-env:latest
 RUN mkdir -p /data/XueQG/Config && cd /data/XueQG
 
 COPY Config/Config.cfg /data/XueQG/Config/Config.cfg
+COPY stealth.min.js /data/XueQG/stealth.min.js
 COPY --from=builder /data/XueQG/dist/XueQG /data/XueQG/XueQG
 
 WORKDIR /data/XueQG
