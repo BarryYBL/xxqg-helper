@@ -27,6 +27,15 @@ if __name__ == '__main__':
     version_thread = threads.MyThread("获取版本更新信息", version.up_info)
     version_thread.run()
 
+    try:
+        core = XCore(noimg=False, nohead=True, nofake=False)
+        common.user_agent = core.getUserAgent()
+        print(common.user_agent)
+        core.quit()
+    except Exception as e:
+        print("获取UserAgent失败" + str(e))
+        pass
+
     # 读取用户登录信息Cookie
     cookies = user.check_user_cookie()
     user_list = user.list_user()
@@ -70,14 +79,7 @@ if __name__ == '__main__':
     uid, nick = user.get_userInfo(cookies)
     user.update_last_user(uid)
 
-    try:
-        core = XCore(noimg=False, nohead=True, nofake=False)
-        common.user_agent = core.getUserAgent()
-        print(common.user_agent)
-        core.quit()
-    except Exception as e:
-        print("获取UserAgent失败" + str(e))
-        pass
+
 
     # 查询用户今天分数
     scores = score.show_userScore(cookies)

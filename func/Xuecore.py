@@ -46,7 +46,8 @@ class XCore:
             # 初始二维码窗口大小
             windows_size = '--window-size=500,450'
             # user_agent_set = self.getheaders()  # 随机UA
-            # self.options.add_argument(f'--user-agent={user_agent_set}')
+            if func.common.user_agent != "":
+                self.options.add_argument(f'--user-agent={func.common.user_agent}')
             if noimg:
                 self.options.add_argument(
                     'blink-settings=imagesEnabled=true')  # 不加载图片, 提升速度，但无法显示二维码
