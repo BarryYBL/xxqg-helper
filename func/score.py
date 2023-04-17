@@ -1,3 +1,4 @@
+import func.common
 from func.common import *
 from func.urls import *
 
@@ -5,15 +6,17 @@ def get_userScore(cookies):
     jar = RequestsCookieJar()
     for cookie in cookies:
         jar.set(cookie['name'], cookie['value'])
-        
+
+    custom_headers = {'Cache-Control': 'no-cache', 'User-Agent': func.common.user_agent}
+
     #获取当前用户总分API
-    user_totalScore_json = requests.get(user_totalScore_url, cookies=jar, headers={'Cache-Control': 'no-cache'}).content.decode("utf8")
+    user_totalScore_json = requests.get(user_totalScore_url, cookies=jar, headers=custom_headers).content.decode("utf8")
     userInfo_totalScore = int(json.loads(user_totalScore_json)["data"]["score"])
     #获取当前用户今天已取得分API
-    user_todayTotalScore_json = requests.get(user_todayTotalScore_url, cookies=jar, headers={'Cache-Control': 'no-cache'}).content.decode("utf8")
+    user_todayTotalScore_json = requests.get(user_todayTotalScore_url, cookies=jar, headers=custom_headers).content.decode("utf8")
     userInfo_todayTotalScore = int(json.loads(user_todayTotalScore_json)["data"]["score"])
     #获取当前用户今天学习分数API
-    user_rateScore_json = requests.get(user_rateScore_url, cookies=jar, headers={'Cache-Control': 'no-cache'}).content.decode("utf8")
+    user_rateScore_json = requests.get(user_rateScore_url, cookies=jar, headers=custom_headers).content.decode("utf8")
     userInfo_rateScore = json.loads(user_rateScore_json)["data"]["taskProgress"]
     
     rule_list = ["1", "2", "9", "1002", "1003", "6", "5", "4"] #显示得分模块

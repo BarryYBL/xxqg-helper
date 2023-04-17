@@ -2,7 +2,7 @@ import os
 import time
 import math
 from func.Xuecore import XCore
-from func import score, user, version, threads
+from func import score, user, version, threads, common
 from study import reader
 from answers.respond import *
 import platform
@@ -69,6 +69,16 @@ if __name__ == '__main__':
 
     uid, nick = user.get_userInfo(cookies)
     user.update_last_user(uid)
+
+    try:
+        core = XCore(noimg=False, nohead=True, nofake=False)
+        common.user_agent = core.getUserAgent()
+        print(common.user_agent)
+        core.quit()
+    except Exception as e:
+        print("获取UserAgent失败" + str(e))
+        pass
+
     # 查询用户今天分数
     scores = score.show_userScore(cookies)
     # 学习情况发送到钉钉
@@ -96,7 +106,7 @@ if __name__ == '__main__':
             print("读取到配置文件...选择模式: " + xue_cfg["base"]["ModeType"])
             XueQG_mode = xue_cfg["base"]["ModeType"]
     except Exception as e:
-        print("选择模式错误：" + e)
+        print("选择模式错误：" + str(e))
         os._exit(0)
 
     print(xue_cfg['base']['multiThreadingText'] + '\n' + "-" * 60)

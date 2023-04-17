@@ -1,9 +1,10 @@
+import func.common
 from func.common import *
 from func.urls import *
 from func.Xuecore import XCore
 from func.score import *
 
-def learn(model, cookies, scores):    
+def learn(model, cookies, scores):
     course = get_study_scores(model, cookies)
     try:
         if course["num"] < course["num_max"] or course["time"] < course["time_max"]:
@@ -57,7 +58,8 @@ def get_links(model):
         return "error"
     learn_list = []
     try:
-        learn_json = requests.get(learn_url + "?_st=" + str(URID)).content.decode("utf8")
+        custom_headers = {'Cache-Control': 'no-cache', 'User-Agent': func.common.user_agent}
+        learn_json = requests.get(learn_url + "?_st=" + str(URID), headers=custom_headers).content.decode("utf8")
         learn_list = json.loads(learn_json)
         if(len(learn_list) > 600):
             learn_list = learn_list[:600]        

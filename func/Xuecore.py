@@ -1,3 +1,4 @@
+import func.common
 from func.common import *
 from func.user import *
 import selenium
@@ -106,6 +107,10 @@ class XCore:
             print("内置驱动初始化失败")
             print("=" * 60)
             raise
+
+    def getUserAgent(self):
+        ua = self.driver.execute_script("return navigator.userAgent")
+        return ua.replace("HeadlessChrome", "Chrome")
 
     def getheaders(self):
         fake_useragent = [
