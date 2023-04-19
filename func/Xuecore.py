@@ -1,3 +1,5 @@
+import time
+
 import func.common
 from func.common import *
 from func.user import *
@@ -198,6 +200,7 @@ class XCore:
                     tryCount = tryCount + 1
                     if xue_cfg.has_option("base", "tryloginsleep"):
                         time.sleep(int(xue_cfg["base"]["tryloginsleep"]))
+            sendMessage("登录超时，退出程序")
             print("登录超时，退出程序")
             os._exit(0)
         except KeyError as e:
@@ -289,16 +292,23 @@ class XCore:
         try:
             builder = ActionChains(self.driver)
             builder.reset_actions()
-            track = self.move_mouse(300)
-            btnSlide = self.driver.find_element_by_class_name("btn_slide")
-            builder.move_to_element(btnSlide)
+            swiper = self.driver.find_element_by_id("swiper_valid")
+            btn_slide = self.driver.find_element_by_class_name("btn_slide")
+            dis = swiper.size["width"] - btn_slide.size["width"]
+            print("滑块移动长度 %d" % dis)
+            track = self.move_mouse(dis)
+            print(track)
+            builder.move_to_element(btn_slide)
             builder.click_and_hold()
             time.sleep(0.2)
+            builder.pause(0.2)
             for i in track:
                 builder.move_by_offset(xoffset=i, yoffset=0)
-                builder.reset_actions()
+                # builder.reset_actions()
+            builder.pause(0.5)
             # 释放左键，执行for中的操作
             builder.release().perform()
+            time.sleep(3)
             self.swiper_valid()
         except Exception as e:
             pass
