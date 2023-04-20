@@ -76,8 +76,10 @@ if __name__ == '__main__':
     else:
         print(color.green("[*]Cookie信息生效中，大约剩余%d小时" % delta_hours))
 
+        
     uid, nick = user.get_userInfo(cookies)
     user.update_last_user(uid)
+    cookies = user.get_newer_cookie_and_save()
 
 
 

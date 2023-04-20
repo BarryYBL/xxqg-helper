@@ -184,3 +184,37 @@ def get_cookie_expire_second(cookie):
             expiry_date = int(d['expiry'])
             return expiry_date - (int)(time.time())
     return 0
+
+def get_newer_cookie_and_save():
+    """
+    获取新的Cookie并保存到文件中
+    """
+    userID = get_last_userID()  # 获取最新userID
+    cookies = get_user_cookie(userID)  # 获取对应的Cookie
+    cookies_old = cookies.copy()
+    
+    jar = RequestsCookieJar()
+    for cookie in cookies:
+        jar.set(cookie['name'], cookie['value'])
+
+    custom_headers = {'Cache-Control': 'no-cache', 'User-Agent': func.common.user_agent}
+    cookie_response = requests.get("https://pc-api.xuexi.cn/open/api/auth/check", cookies=jar,
+                                   headers=custom_headers).cookies  # 请求获取最新的token
+
+    for item in range(len(cookies)):  # 更新token的value以及expiry
+        if cookies[item]['name'] == "token":
+            cookies[item]['value'] = cookie_response.get("token")
+            cookies[item]['expiry'] = next(x for x in cookie_response if x.name == 'token').expires
+
+    try:
+        save_user_cookies(cookies, userID)  # Cookie保活成功, 保存新的Cookie
+        cookies = get_user_cookie(userID)  # 调用通用方法获得Cookie, 避免出现奇怪bug
+        if len(cookies) == 0 or get_cookie_expire_second(cookies) <= 0:  # 出现bug导致没有获取到新的cookie
+            print(color.red("[*]Cookie信息未能更新成功，需登录"))
+            save_user_cookies(cookies_old, userID)  # 保存先前的Cookie
+            return cookies_old
+        else:
+            print(color.green("[*]Cookie更新成功了，大约剩余12小时"))  # 新的Cookie有效期12小时, 不用计算
+            return cookies
+    except:
+        print(color.red("[*]Cookie信息未能更新成功"))
