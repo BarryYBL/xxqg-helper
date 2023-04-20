@@ -19,6 +19,7 @@
 > 
 > 3、文章、答题模块增加重试功能。
 > 
+> 4、增加cookie保活机制。（由@xiaoWangSec提供）
 
 
 **2023/04/18**
@@ -38,19 +39,12 @@
 > 
 > 3、docker镜像改成多架构模式。
 > 
-**2023/04/07**
-
-> 1、解决Cookie有效期判断致无法获取学习积分问题。
-> 
-> 2、AutoQuit问题修复。
-
-
 
 # 使用方式
 
-#### Windows版本
+#### Windows版本（小白用户建议使用）
 
-> 使用Release里面的bin版本或者直接安装Python环境，使用前请修改Config/Config.cfg配置好二维码推送方式。
+> 使用Release里面的bin版本或者直接安装Python环境。
 
 #### Linux版本
 
@@ -108,6 +102,17 @@
 >
 >```shell
 > 30 9 * * * docker start xxqg
+> ```
+
+> **如何对登录状态进行保活**
+>
+> 目前cookie有效时间为12小时。每次启动程序时会执行一次保活, 仅当前Cookie有效时才会执行。
+> 请设置多个时段的crontab任务以实现保活。(由@xiaoWangSec提供)
+>```shell
+> 30 9 * * * docker start xxqg
+> 30 15 * * * docker start xxqg
+> 30 21 * * * docker start xxqg
+> 5 23 * * * docker start xxqg
 > ```
 
 # 免责声明

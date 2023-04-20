@@ -66,22 +66,9 @@ if __name__ == '__main__':
     else:
         print(color.green("[*]Cookie信息生效中，大约剩余%d小时" % delta_hours))
 
-    delta_seconds = user.get_cookie_expire_second(cookies)
-    delta_hours = round(delta_seconds / 3600)
-    if delta_seconds <= 0:
-        send_msg = "获取到的Cookie无效"
-        print(color.red(send_msg))
-        sendMessage(send_msg)
-        os._exit(0)
-    else:
-        print(color.green("[*]Cookie信息生效中，大约剩余%d小时" % delta_hours))
-
-        
     uid, nick = user.get_userInfo(cookies)
     user.update_last_user(uid)
     cookies = user.get_newer_cookie_and_save()
-
-
 
     # 查询用户今天分数
     scores = score.show_userScore(cookies)
