@@ -55,6 +55,9 @@ if __name__ == '__main__':
             sendMessage("登录过程发生错误")
             os._exit(1001)
 
+    uid, nick = user.get_userInfo(cookies)
+    user.update_last_user(uid)
+    cookies = user.get_newer_cookie_and_save()
 
     delta_seconds = user.get_cookie_expire_second(cookies)
     delta_hours = round(delta_seconds / 3600)
@@ -66,9 +69,15 @@ if __name__ == '__main__':
     else:
         print(color.green("[*]Cookie信息生效中，大约剩余%d小时" % delta_hours))
 
-    uid, nick = user.get_userInfo(cookies)
-    user.update_last_user(uid)
-    cookies = user.get_newer_cookie_and_save()
+    # 更新Cookie标志文件，此模式只保活Cookie，不学习
+    if os.path.exists("./User/UpdateCookie"):
+        os.remove("./User/UpdateCookie")
+        print("更新Cookie有效期，不进行学习！")
+        os._exit(0)
+
+    if os.environ.get("UpdateCookie") is not None:
+        print("更新Cookie有效期，不进行学习！")
+        os._exit(0)
 
     # 查询用户今天分数
     scores = score.show_userScore(cookies)
@@ -161,6 +170,7 @@ if __name__ == '__main__':
     scores = score.get_userScore(cookies)
     # 学习结束情况发送到钉钉
     try:
+        cookie_expire_msg = "\n > ###### Cookie有效时长:" + str(delta_hours) + "小时"
         send_msg = "#### " + nick + "学习结束 \n > ##### 学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(
             scores["today"]) + \
                    "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
@@ -171,7 +181,7 @@ if __name__ == '__main__':
                    ", 每日登陆:" + str(scores["login"]) + "/" + str(scores["login_max"]) + \
                    "\n > ###### 每周答题: " + str(scores["weekly"]) + "/" + str(scores["weekly_max"]) + \
                    ", 专项答题:" + str(scores["special"]) + \
-                   "/" + str(scores["special_max"])
+                   "/" + str(scores["special_max"]) + cookie_expire_msg
         sendMessage(send_msg)
     except Exception as e:
         pass

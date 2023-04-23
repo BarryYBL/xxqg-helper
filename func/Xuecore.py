@@ -18,6 +18,7 @@ from PIL import Image
 from io import BytesIO
 import re
 import urllib.parse
+import traceback
 
 
 class XCore:
@@ -105,9 +106,11 @@ class XCore:
                 except Exception as e:
                     print("stealth.min.js加载失败：" + str(e))
                     pass
-        except:
+        except Exception as e:
             print("=" * 60)
-            print("内置驱动初始化失败")
+            print("内置驱动初始化失败:" + str(e))
+            stack_trace = traceback.format_exc()
+            print(stack_trace)
             print("=" * 60)
             raise
 
