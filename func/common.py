@@ -56,6 +56,10 @@ def load_config(nologo=False):
             xue_cfg.set("base", "AutoQuit", os.environ.get("AutoQuit"))
         if not xue_cfg.has_option("base", "AutoQuit"):
             xue_cfg.set("base", "AutoQuit", "0")
+        if os.environ.get("SleepSeconds") is not None:
+            xue_cfg.set("base", "SleepSeconds", os.environ.get("SleepSeconds"))
+        if not xue_cfg.has_option("base", "SleepSeconds"):
+            xue_cfg.set("base", "SleepSeconds", "0")
         if os.environ.get("PushMode") is not None:
             xue_cfg.set("push", "PushMode", os.environ.get("PushMode"))
         if os.environ.get("DDtoken") is not None:
@@ -64,6 +68,7 @@ def load_config(nologo=False):
             xue_cfg.set("push", "DDsecret", os.environ.get("DDsecret"))
         if os.environ.get("PPtoken") is not None:
             xue_cfg.set("push", "PPtoken", os.environ.get("PPtoken"))
+
     return xue_cfg
 
 

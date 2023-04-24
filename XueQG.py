@@ -6,6 +6,8 @@ from func import score, user, version, threads, common
 from study import reader
 from answers.respond import *
 import platform
+import datetime
+import time
 
 if __name__ == '__main__':
 
@@ -26,6 +28,11 @@ if __name__ == '__main__':
     # 获取版本更新信息
     version_thread = threads.MyThread("获取版本更新信息", version.up_info)
     version_thread.run()
+
+    if xue_cfg["base"]["SleepSeconds"] != "0":
+        sleep_seconds = random.randint(1, int(xue_cfg["base"]["SleepSeconds"]))
+        print("等待" + str(sleep_seconds) + "秒后执行..")
+        time.sleep(sleep_seconds)
 
     try:
         core = XCore(noimg=False, nohead=True, nofake=False)
@@ -83,7 +90,8 @@ if __name__ == '__main__':
     scores = score.show_userScore(cookies)
     # 学习情况发送到钉钉
     try:
-        cookie_expire_msg = "\n > ###### Cookie有效时长:" + str(delta_hours) + "小时"
+        cookie_expire_msg = "\n > ###### " + time.strftime('%Y-%m-%d %H:%M:%S') + " Cookie有效时长:" + str(delta_hours) \
+                            + "小时"
         send_msg = "#### " + nick + "开始学习" + \
                    "\n > ##### 目前学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(scores["today"]) + \
                    "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
@@ -170,7 +178,8 @@ if __name__ == '__main__':
     scores = score.get_userScore(cookies)
     # 学习结束情况发送到钉钉
     try:
-        cookie_expire_msg = "\n > ###### Cookie有效时长:" + str(delta_hours) + "小时"
+        cookie_expire_msg = "\n > ###### " + time.strftime('%Y-%m-%d %H:%M:%S') + " Cookie有效时长:" + str(delta_hours) \
+                            + "小时"
         send_msg = "#### " + nick + "学习结束 \n > ##### 学习总积分: " + str(scores["total"]) + "\t今日得分: " + str(
             scores["today"]) + \
                    "\n > ###### 阅读文章: " + str(scores["article_num"]) + "/" + str(scores["article_num_max"]) + \
