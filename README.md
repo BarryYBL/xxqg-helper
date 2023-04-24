@@ -125,7 +125,15 @@
 > 30 21 * * * docker start xxqg
 > 5 23 * * * docker start xxqg
 > ```
-
+> 此模式下可能会有很多消息，屏蔽保活的消息可以参照如下设置：
+> 
+> 例如：docker容器创建时候映射 /data/XueQG/User 到宿主机 /data/XueQG/User
+> 
+> 那么cron中7点保活时是不通知的，也不进行学习，13:00开始学习，并且有消息通知。
+>```shell
+> 0 7 * * * echo "" >/data/XueQG/User/UpdateCookie && docker start xxqg
+> 0 13 * * * docker start xueqg
+>```
 # 免责声明
 
 使用需严格遵守开源许可协议。本项目仅限于程序开发学习交流之用，严禁用于商业用途，禁止使用本项目进行任何盈利活动。对一切非法使用所产生的后果，我们概不负责。
